@@ -4,14 +4,14 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">Franchises</h2>
-          <h3 class="section-subheading text-muted">Choose from our connecting stores</h3>
+          <h2 class="section-heading text-uppercase" style="font-size: 60px">Franchises</h2>
+          <h3 class="section-subheading text-muted" style="font-size: 30px">Choose from our connecting stores</h3>
         </div>
       </div>
 
   <div class="container">
     <div class="text-field">
-      <h5 id="theme">매장 선택하기</h5>
+      <h5 id="theme" style="font-size: 40px">매장 선택하기</h5>
 
       <div id="app">
         <reactive-base app="bakery_manager" credentials="WQ73FJ2Me:93ebb63e-a51c-42f5-8b8e-69c0c664b7d3">
@@ -20,7 +20,7 @@
               <div class="flex book-content" key="item._id">
                 <div class="flex column justify-center ml20">
                   <div style="font-weight: bold;">
-                    <button v-on:click="goto_store(item._id)">{{ item.storeName }}</button>
+                    <button v-on:click="goto_store(item._id)" style="font-size: 20px">{{ item.storeName }}</button>
                   </div>
                   <div class="inline-1" style="margin-bottom:10px; margin-left:10px; margin-top:5px;">
 
@@ -80,7 +80,7 @@
 
 
 <script>
-
+import "./styles.css";
 import axios from 'axios'
 const baseurl = 'https://scalr.api.appbase.io'
 
@@ -113,5 +113,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Arbutus+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
+@import 'bootstrap.css';
 
+
+
+#nav_home {
+  color: white;
+}
+
+
+.container {
+  font-family: 'Noto Sans KR', sans-serif;
+}
 </style>

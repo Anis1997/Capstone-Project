@@ -73,7 +73,7 @@
 
 
 <script>
-
+import "./styles.css";
 import axios from 'axios'
 const baseurl = 'https://scalr.api.appbase.io'
 
@@ -108,7 +108,7 @@ export default {
 
   methods: {
     goto_home() {
-      this.$router.replace('/home');
+      this.$router.replace('/');
     },
     show_cart() {
       var html = '<table><tr><td style="font-weight:bold">제품명</td><td style="font-weight:bold;">수량</td></tr>';
@@ -130,5 +130,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+@import url('https://fonts.googleapis.com/css?family=Arbutus+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
+@import 'bootstrap.css';
 </style>

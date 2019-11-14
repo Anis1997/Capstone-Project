@@ -13,7 +13,76 @@
         <span>{{this.store_name}}</span><br>
         <span>매장 제품 확인하기</span>
       </h5>
-      <button v-on:click="goto_franchises()">이전 페이지</button>
+      <button v-on:click="goto_franchises()">이전 페이지</button><br><br>
+      
+      <span>
+              <md-dialog :md-active.sync="showDialog">
+                <md-dialog-title>Recommendation for you!</md-dialog-title>
+
+                <md-tabs md-dynamic-height>
+        <md-tab md-label="New Stuff">
+           <reactive-base app="" credentials="">
+            <reactive-list componentId="SearchResult" dataField="_id" :showResultStats="false" :pagination="true" :from="0" :size="10" :defaultQuery="this.defaultQuery">
+              <div slot="renderData" slot-scope="{ item }">
+                <div class="flex book-content" key="item._id">
+                  <div class="flex column justify-center ml20">
+                    <div style="font-weight:bold; margin-bottom:10px" >{{ item.pName }}</div>
+                    <div>
+                      <span class="small-title" >[가격] {{ item.pPrice }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </reactive-list>
+          </reactive-base>
+        </md-tab>
+
+        <md-tab md-label="Most Popular">
+          <reactive-base app="bakery_record" credentials="TqzgC7pxS:222d2517-2375-4324-bf75-13085ec4aa7d">
+            <reactive-list componentId="SearchResult" dataField="_id" :showResultStats="false" :pagination="true" :from="0" :size="10" :defaultQuery="this.defaultQuery">
+              <div slot="renderData" slot-scope="{ item }">
+                <div class="flex book-content" key="item._id">
+                  <div class="flex column justify-center ml20">
+                    <div style="font-weight:bold; margin-bottom:10px" >{{ item.rName }}</div>
+                    <div>
+                      <span class="small-title" >[가격] {{ item.rPrice }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </reactive-list>
+          </reactive-base>
+        </md-tab>
+
+        <md-tab md-label="Fitted for you!">
+         <reactive-base app="test_record" credentials="o4RZue9dm:3e7a63a1-5139-4a2e-bb0a-c40844c76dc3">
+            <reactive-list componentId="SearchResult" dataField="rBuyer" :showResultStats="false" :pagination="true" :from="0" :size="10" :defaultQuery="this.defaultQuery">
+              <div slot="renderData" slot-scope="{ item }">
+                <div class="flex book-content" key="item._id">
+                  <div class="flex column justify-center ml20">
+                    <div style="font-weight:bold; margin-bottom:10px" >{{ item.rName }}</div>
+                    <div>
+                      <span class="small-title" >[가격] {{ item.rPrice }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </reactive-list>
+          </reactive-base>
+        </md-tab>
+      </md-tabs>
+
+      <md-dialog-actions>
+        <md-button class="md-primary" @click="showDialog = false">Close</md-button>
+       
+      </md-dialog-actions>
+    </md-dialog>
+
+              <button class="btn btn-danger btn-sm" @click="showDialog = true" style="margin-left:10px;">Recommended for you!</button>
+            </span>
+
+
+      
 
       <div class="grid-container">
         <div id="app" class="products">
@@ -23,7 +92,7 @@
                 <div class="flex book-content" key="item._id">
                   <div class="flex column justify-center ml20">
 
-                    <div style="font-weight:bold; margin-bottom:10px;">{{ item.pName }}</div>
+                    <div style="font-weight:bold; margin-bottom:10px; font-size: 40px" >{{ item.pName }}</div>
 
                     <div>
                       <button v-on:click="cart_clicked(item._id)">카트 추가</button>
@@ -36,7 +105,7 @@
 
 
                     <div>
-                      <span class="small-title">[가격]</span>{{ item.pPrice }}
+                      <span class="small-title" style="font-size: 30px">[가격] {{ item.pPrice }}</span>
                     </div>
 
                   </div>
@@ -118,10 +187,10 @@
 
 
 <script>
-
+import "./styles.css";
 import axios from 'axios'
 const baseurl = 'https://scalr.api.appbase.io'
-
+import 'vue-material/dist/vue-material.min.css'
 
 export default {
   name: 'Product',
@@ -134,10 +203,15 @@ export default {
       cart_name: [],
       cart_amount: [],
     };
+    
   },
+      data: () => ({
+      showDialog: false
+    }),
 
   created() {
     this.manager_id = this.$session.get('managerId');
+    
 
     axios({
         method: 'POST',
@@ -151,6 +225,7 @@ export default {
             "_id": this.manager_id,
           }, ]
         }
+        
       })
       .then((response) => {
         console.log(response);
@@ -159,11 +234,12 @@ export default {
       }).catch((e) => {
         console.log(e.response)
       })
+      
   },
 
   methods: {
     goto_home() {
-      this.$router.replace('/home');
+      this.$router.replace('/');
     },
     goto_franchises() {
       this.$router.replace('/franchises');
@@ -290,6 +366,7 @@ export default {
       }else{
         alert("장바구니가 비어있습니다!");
       }
+      
     },
 
 
@@ -299,5 +376,81 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Arbutus+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
+@import 'bootstrap.css';
 
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'app'
+    'cart';
+}
+
+.base{
+  display: grid;
+  grid-template-areas:
+  'filters-container products products';
+}
+
+
+
+.text-field {
+  margin-left: 40px;
+  margin-top: 10px;
+}
+
+.container {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.small-title {
+  color: #425DC6;
+  font-weight: bold;
+}
+
+.products {
+  width: auto;
+  right: 0;
+  overflow-y: scroll;
+  height: 65vh;
+  display: grid;
+  grid-area: products;
+  flex-direction: column;
+  scroll-behavior: smooth;
+  transition: all ease 0.2s;
+}
+
+.filters-container {
+  width: 20%;
+  display: grid;
+  grid-area:filters-container;
+  flex-direction: column;
+  margin-left:10px;
+  margin-right:50px;
+  margin-top: 140px;
+  top: 0;
+  scroll-behavior: smooth;
+  justify-content: center;
+  transition: all ease 0.2s;
+  overflow: hidden;
+}
+
+.cart {
+  grid-area: cart;
+  display: grid;
+  background-color: white;
+  margin-bottom: 50px;
+}
+
+
+#app {
+  display: grid;
+  grid-area: app;
+  right:0;
+}
+
+  .md-dialog {
+    max-width: 728px;
+  }
 </style>

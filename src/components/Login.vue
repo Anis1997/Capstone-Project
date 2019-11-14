@@ -124,7 +124,7 @@ export default {
                    console.log("CONFIRM!")
                    console.log("Current User ID is :"+currentUserId)
                    alert('어서오세요! '+currentUserName+'님')
-                   this.$router.push('/home')
+                   this.$router.push('/')
                }
                else{
                    currentUserId = ''
@@ -184,4 +184,6 @@ body {
 #login-container {
   font-family: 'Noto Sans KR', sans-serif;
 }
+
+
 </style>
