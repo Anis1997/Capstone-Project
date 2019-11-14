@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     
-   <VuePopupPlugin :config="popupDefaultConfig"/>
+
     <router-view />
   </div>
 

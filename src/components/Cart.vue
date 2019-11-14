@@ -92,7 +92,9 @@
                 <div class="flex book-content" key="item._id">
                   <div class="flex column justify-center ml20">
 
-                    <div style="font-weight:bold; margin-bottom:10px; font-size: 40px" >{{ item.pName }}</div>
+                       <!--img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Soboro-ppang.jpg" alt="Simply Easy Learning" width="200" height="80"-->
+                    <div style="font-weight:bold; margin-bottom:10px; font-size: 40px" >{{item.pImg}} {{ item.pName }} 
+                    </div>
 
                     <div>
                       <button v-on:click="cart_clicked(item._id)">카트 추가</button>

@@ -8,6 +8,9 @@
         </div>
       </div>
 
+      <br>
+      <br>
+
     <div class="container">
       <div class="text-field">
         <h5 id="theme" style="font-weight:bold;">마이 페이지</h5>
