@@ -23,7 +23,7 @@
                 <button class="btn btn-success">로그인</button>
                 <div id="register-link" class="text-right">
                   <p>Don't have an account?</p>
-                  <a href="/signup" class="text-info">등록 정보</a>
+                  <button v-on:click="goto_signup()" class="text-info">등록 정보</button>
                   <div style="margin-bottom: 10px;" />
                   <md-button class="md-accent" v-on:click="gotoHome()">이전 페이지</md-button>
                 </div>
@@ -90,6 +90,10 @@ export default {
     }
   },
   methods: {
+    goto_signup(){
+      this.$router.replace('/signup');
+    },
+
     loginFunction: function(){
          axios({
                method: 'POST',
@@ -113,11 +117,14 @@ export default {
                if(response.data.hits.max_score != null){
                    currentUserId = response.data.hits.hits[0]._id
                    var currentUserName = response.data.hits.hits[0]._source.name
+                   this.$session.set('mangerId', '')
+                   this.$session.set('cart_array', '')
                    this.$session.set('uId', currentUserId)
+                   this.$session.set('uName', currentUserName)
                    console.log("CONFIRM!")
                    console.log("Current User ID is :"+currentUserId)
                    alert('어서오세요! '+currentUserName+'님')
-                   this.$router.push('/')
+                   this.$router.push('/home')
                }
                else{
                    currentUserId = ''
@@ -178,102 +185,3 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
 }
 </style>
-
-
-<!--template>
-
-<div class="signup container">
-   <form @submit.prevent="signup" class="card-panel">
-       <h2 class="center deep-purple-text">Signup</h2>
-       <div class="field">
-           <label for="email">Email:</label>
-           <input type="email" name="email" v-model="email">
-       </div>
-        <div class="field">
-           <label for="password">Password:</label>
-           <input type="password" name="password" v-model="password">
-        </div>
-        <div class="field">
-           <label for="alias">ID:</label>
-           <input type="text" name="alias" v-model="alias">
-        </div>
-        <p class="red-text center" v-if="feedback">{{feedback}}</p>
-        <div class="field center">
-            <button class="btn deep-purple">Signup!</button>
-        </div>
-    </form> 
-</div>  
-</template>
-
-<script>
-import slugify from 'slugify'
-import db from '@/firebase/init'
-
-export default {
-    name:'Signup',
-    data(){
-        return{
-            email:null,
-            password:null,
-            alias:null,
-            feedback:null,
-            slug:null
-        }
-    },
-
-    methods:{
-        signup(){
-            if(this.alias){
-                this.slug = slugify(this.alias,{
-                    replacement:'-',
-                    remove: /[$*_+~.()'"!\-:@]/g,
-                    lower:true
-                })
-                let ref= db.collection('name').doc(this.slug)
-                ref.get().then(doc =>{
-                    if(doc.exists){
-                        this.feedback ="This ID already exists"
-                    }else{
-                        this.feedback="This ID is free to use"
-                    }
-                })
-                console.log(this.slug)
-            }else{
-                this.feedback= "You must enter an ID"
-            }
-        }
-    }
-
-}
-</script>
-
-<style>
-
-body {font-family: Arial, Helvetica, sans-serif;}
-
-input[type=text], input[type=password], input[type=email] {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  display: inline-block;
-  border: none;
-  background:#E2DEDE;
-}
-
-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  border: none;
-  cursor: pointer;
-  opacity: 0.9;
-}
-
-button:hover {
-  opacity:1;
-}
-
-
-
-
-</style-->

@@ -1,40 +1,32 @@
 <template>
-
 <section class="page-section" id="cart">
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">Franchises</h2>
-          <h3 class="section-subheading text-muted">Choose from our connecting stores</h3>
+          <h2 class="section-heading text-uppercase">Your Cart</h2>
+          <h3 class="section-subheading text-muted">Please do Come Again</h3>
         </div>
       </div>
+    
+
 
   <div class="container">
     <div class="text-field">
-      <h5 id="theme">매장 선택하기</h5>
+      <h5 id="theme" style="color:red;">결제 및 예약하기</h5>
 
-      <div id="app">
-        <reactive-base app="bakery_manager" credentials="WQ73FJ2Me:93ebb63e-a51c-42f5-8b8e-69c0c664b7d3">
-          <reactive-list componentId="SearchResult" dataField="_id" :showResultStats="false" :pagination="true" :from="0" :size="10">
-            <div slot="renderData" slot-scope="{ item }">
-              <div class="flex book-content" key="item._id">
-                <div class="flex column justify-center ml20">
-                  <div style="font-weight: bold;">
-                    <button v-on:click="goto_store(item._id)">{{ item.storeName }}</button>
-                  </div>
-                  <div class="inline-1" style="margin-bottom:10px; margin-left:10px; margin-top:5px;">
-
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </reactive-list>
-
-        </reactive-base>
+      <div class="welcome">
+        {{this.uName}}님
       </div>
 
+      <div>
+        <h4>장바구니 목록</h4>
+        <button v-on:click="show_cart()">장바구니 불러오기</button>
+      </div>
+      <table id="cart_lists_2" style="width:200px;"></table>
+
+
     </div>
+
          <footer class="footer">
     <div class="container">
       <div class="row align-items-center">
@@ -75,6 +67,7 @@
   </footer>
   </div>
 </div>
+
 </section>
 </template>
 
@@ -85,27 +78,51 @@ import axios from 'axios'
 const baseurl = 'https://scalr.api.appbase.io'
 
 export default {
-  name: 'Store',
+  name: 'Pay',
   data() {
     return {
+      uName: '',
+      cart_array: null,
 
     };
   },
 
   created() {
+    this.uName = this.$session.get('uName');
+    this.cart_array = this.$session.get('cart_array');
 
+    var html = '<table>';
+    for (var i = 0; i < this.cart_array.length; i++) {
+      html += '<tr><td>';
+      html += this.cart_array[i].pName;
+      html += '</td><td>';
+      html += this.cart_array[i].pAmount;
+      html += '</td></tr>';
+    }
+    html += '</table>';
+
+    //console.log(document.getElementById("cart_lists_2"));
+    console.log(html);
+    //document.getElementById("cart_lists_2").innerHTML = html;
   },
 
   methods: {
     goto_home() {
       this.$router.replace('/home');
     },
+    show_cart() {
+      var html = '<table><tr><td style="font-weight:bold">제품명</td><td style="font-weight:bold;">수량</td></tr>';
+      for (var i = 0; i < this.cart_array.length; i++) {
+        html += '<tr><td>';
+        html += this.cart_array[i].pName;
+        html += '</td><td>';
+        html += this.cart_array[i].pAmount;
+        html += '</td></tr>';
+      }
+      html += '</table>';
 
-    goto_store(manager_id) {
-      this.$session.set('managerId', manager_id);
-      this.$router.replace('/cart');
+      document.getElementById("cart_lists_2").innerHTML = html;
     },
-
 
   }
 }

@@ -29,6 +29,26 @@ const router = new VueRouter({
             path: '/signup',
             name: 'Signup',
             component: load('Signup')
+        },
+        {
+            path: '/mypage',
+            name: 'Mypage',
+            component: load('Mypage')
+        },
+        {
+            path: '/franchises',
+            name: 'Franchises',
+            component: load('Franchises')
+        },
+        {
+            path: '/cart',
+            name: 'Cart',
+            component: load('Cart')
+        },
+        {
+            path: '/pay',
+            name: 'Pay',
+            component: load('Pay')
         }
     ]
 })

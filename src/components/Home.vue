@@ -4,10 +4,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color:black">
     <div class="container">
       <a class="navbar-brand js-scroll-trigger" href="#page-top">Bakery Web</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        Menu
-        <i class="fas fa-bars"></i>
-      </button>
+
       <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav text-uppercase ml-auto">
             <li
@@ -39,15 +36,23 @@
         <div class="intro-lead-in">Welcome To Our Bakery Web!</div>
         <div class="intro-heading text-uppercase">It's Nice To Meet You</div>
         
+        <div class="welcome">
+        환영합니다! {{this.uName}}님!
+        </div>
+
+      <button v-on:click="goto_franchises()">매장 찾기</button>
+      <button v-on:click="goto_mypage()">마이페이지</button>
       </div>
+
+
     </div>
   </header>
 
 <Services></Services>
 <Franchises></Franchises>
-<Cart></Cart>
+
 <Contact></Contact>
-<Mypage></Mypage>
+
 
 
 
@@ -98,22 +103,37 @@
 import Franchises from './Franchises.vue'
 import Services from './Services.vue'
 import Cart from './Cart.vue'
-import Mypage from './Mypage.vue'
+
 import Contact from './Contact.vue'
+import axios from 'axios'
+const baseurl = 'https://scalr.api.appbase.io'
 
 
 export default {
   name: 'app',
   components:{
     
-    Franchises,
+  
     Services,
-    Cart,
-    Mypage,
+ 
+  
     Contact,
     //Carousel,
     //Slide
   },
+
+  data() {
+    return {
+      uName: '',
+
+    };
+  },
+
+    created() {
+    this.uName = this.$session.get('uName');
+
+  },
+
 
   data:()=>({
       navList: [
@@ -123,11 +143,11 @@ export default {
             },
             {
                 name: 'Franchises',
-                path: '#franchises'
+                path: '/franchises'
             },
             {
                 name: 'Cart',
-                path: '#cart'
+                path: '/cart'
             },
             {
                 name: 'Contact',
@@ -135,7 +155,7 @@ export default {
             },
             {
                 name: 'Mypage',
-                path: '#mypage'
+                path: '/mypage'
             },
 
             {
@@ -150,9 +170,29 @@ export default {
                 name: 'Logout',
                 path: '/logout'
             },
+            {
+                name: 'Checkout',
+                path: '/pay'
+            },
+
 
 
         ]
-  })
+  }),
+
+    methods: {
+    goto_franchises(){
+      this.$router.replace('/franchises');
+    },
+    goto_mypage(){
+      this.$router.replace('/mypage');
+    },
+
+  }
+
 }
 </script>
+
+<style scoped>
+
+</style>

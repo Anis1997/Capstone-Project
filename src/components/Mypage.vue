@@ -1,6 +1,7 @@
 <template>
-<section class="page-section" id="mypage">
-<div class="container-start">
+<div class="container" id="page-container">
+
+  <div id="mypage">
 
 
   <div class="container">
@@ -10,6 +11,10 @@
 
       <div class="description">
         
+        <div class="welcome">
+          {{this.uName}}님의 개인정보
+        </div>
+
         Name: <span class="user_info">{{ this.uName }}</span>
         <div class="crack" />
         Email: <span class="user_info">{{ this.uEmail }}</span>
@@ -50,8 +55,47 @@
     </div>
 
   </div>
+
+       <footer class="footer">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; KimAJo</span>
+        </div>
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="#">Privacy Policy</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">Terms of Use</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 </div>
-</section>
+</div>
 </template>
 
 
