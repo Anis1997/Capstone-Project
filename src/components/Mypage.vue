@@ -12,23 +12,28 @@
       <br>
 
     <div class="container">
-      <div class="text-field">
-        <h5 id="theme" style="font-weight:bold;">마이 페이지</h5>
+      <div class="text-field" style="font-size:30px">
+        <br>
+        <br>
 
-        <div class="welcome">
+        <div class="welcome" style="font-size:30px">
           {{this.uName}}님의 개인정보를 확인하세요
         </div>
 
-        Name: <span class="user_info">{{ this.uName }}</span>
+        Name: <span class="user_info" style="font-size:25px">{{ this.uName }}</span>
         <div class="crack" />
-        Email: <span class="user_info">{{ this.uEmail }}</span>
+        Email: <span class="user_info" style="font-size:25px">{{ this.uEmail }}</span>
         <div class="crack" />
-        Password: <span class="user_info">{{ this.uPassword }}</span>
+        Password: <span class="user_info" style="font-size:25px">{{ this.uPassword }}</span>
+        <div class="crack" />
+        Bakery Coin: <span class="user_info" style="font-size:25px">{{ this.bakery_coin }}</span>
+        <div class="crack" />
+        Barcode: <span class="user_info" style="font-size:25px">{{ this.barcode }}</span>
         <div class="crack" />
         <span>
           <span>
               <md-dialog :md-active.sync="showDialog">
-                <md-dialog-title>Change info</md-dialog-title>
+                <md-dialog-title>Change password</md-dialog-title>
 
                 <md-tabs md-dynamic-height>
                   <md-tab md-label="비밀번호 변경">
@@ -45,6 +50,8 @@
 
               <button class="btn btn-danger btn-sm" @click="showDialog = true" style="margin-left:10px;">비밀번호 변경</button>
             </span><br><br>
+
+
 
              <span>
               <md-dialog :md-active.sync="showDialog1">
@@ -78,8 +85,9 @@
   
 
         </span>
+<br>
 
-
+<button v-on:click="goto_membership()">My Membership</button>
 
       </div>
        <footer class="footer">
@@ -125,6 +133,9 @@
 </template>
 
 <script>
+import "./styles.css";
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css';
 
 import axios from 'axios'
 const baseurl = 'https://scalr.api.appbase.io'
@@ -135,26 +146,34 @@ export default {
     return {
       showDialog: false,
       showDialog1: false,
-      uName: '',
+      uName: null,
       barcode: '',
       bakery_coin: 0,
       contact: '',
-      uEmail: '',
+      uEmail: null,
       addr: '',
       uPassword: '',
       coupon_lists: null,
+      password:null,
+      password_trial:null,
     };
   },
-
+ 
   created() {
       this.uName = this.$session.get('uName');
       this.uEmail = this.$session.get('uEmail');
       this.uPassword = this.$session.get('uPassword');
+      this.uPassword = this.$session.get('bakery_coin');
+      this.uPassword = this.$session.get('barcode');
     },
+    
    
   methods: {
     goto_home() {
       this.$router.replace('/')
+    },
+        goto_membership(){
+      this.$router.replace('/membership');
     },
     change_password() {
       if(this.password == this.password_trial){
@@ -208,3 +227,4 @@ export default {
     width: 768px;
   }
 </style>
+

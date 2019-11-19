@@ -49,6 +49,11 @@ const router = new VueRouter({
             path: '/pay',
             name: 'Pay',
             component: load('Pay')
+        },
+        {
+            path: '/membership',
+            name: 'Membership',
+            component: load('Membership')
         }
     ]
 })
