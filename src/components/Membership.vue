@@ -1,3 +1,219 @@
+<template>
+<div class="container-start">
+
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading text-uppercase" style="font-size: 60px">Membership</h2>
+          <h3 class="section-subheading text-muted" style="font-size: 30px">Your info</h3>
+        </div>
+      </div>
+
+      <br>
+      <br>
+      
+  <div class="container">
+    <div class="text-field">
+
+        이름: <span class="user_info" style="font-size:30px">{{ this.uName }}</span>
+        <div class="crack" />
+        베이커리 코인: <span class="user_info" style="font-size:30px">{{ this.bakery_coin }}</span>
+        <div class="crack" />
+        바코드: <span class="user_info" style="font-size:30px">{{ this.barcode }}</span>
+        <div class="crack" />
+    </div>
+
+    <br>
+     <br>
+     <br>
+
+
+
+        <div class="coin_pay">
+          <h6 style="font-weight:bold; font-size:40px">코인 충전하기</h6>
+          <br>
+          <br>
+          <div>
+            <span>
+              <span>
+                <md-dialog :md-active.sync="showDialog_2">
+                  <md-dialog-title>베이커리 코인 충전하기</md-dialog-title>
+
+                  <md-tabs md-dynamic-height>
+                    <md-tab md-label="결제 진행">
+                      <p><span style="font-weight:bold; color:red;">{{this.user_pay}}</span>원 결제 진행하시겠습니까?</p>
+                    </md-tab>
+                  </md-tabs>
+
+                  <md-dialog-actions>
+                    <md-button class="md-primary" @click="showDialog_2 = false">취소</md-button>
+                    <md-button class="md-primary" @click="pay()">결제</md-button>
+                  </md-dialog-actions>
+                </md-dialog>
+
+                <button type="button" class="btn btn-success" style="font-size:40px" v-on:click="click_pay(5000)">5000원</button>
+                <button type="button" class="btn btn-success" style="font-size:40px" v-on:click="click_pay(10000)">10000원</button>
+                <button type="button" class="btn btn-success" style="font-size:40px" v-on:click="click_pay(20000)">20000원</button>
+                <button type="button" class="btn btn-success" style="font-size:40px" v-on:click="click_pay(50000)">50000원</button>
+
+              </span>
+            </span><br>
+          </div>
+
+        </div>
+
+      </div>
+      <footer class="footer">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <span class="copyright">Copyright &copy; KimAJo</span>
+        </div>
+        <div class="col-md-4">
+          <ul class="list-inline social-buttons">
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <ul class="list-inline quicklinks">
+            <li class="list-inline-item">
+              <a href="#">Privacy Policy</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">Terms of Use</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+      </div>
+</template>
+
+
+<script>
+import "./styles.css";
+import axios from 'axios'
+const baseurl = 'https://scalr.api.appbase.io'
+export default {
+  name: 'Mypage',
+  data() {
+    return {
+      uName: '',
+      barcode: '',
+      bakery_coin: 0,
+      contact: '',
+      email: '',
+      addr: '',
+      pwd: '',
+      origin_pwd: '',
+      new_pwd_trial: '',
+      new_pwd: '',
+      coupon_lists: null,
+      uid: '',
+      showDialog: false,
+      showDialog_2: false,
+      user_pay: null,
+    };
+  },
+  created() {
+    this.uName = this.$session.get('uName');
+    this.uid = this.$session.get('uId');
+    // get user info.
+    axios({
+        method: 'POST',
+        url: baseurl + '/bakery_customer/_mget',
+        headers: {
+          Authorization: 'Basic anhaMFFSQzdhOjhlNDhjYzhlLWUxNmUtNDNiNy1hZjUyLTkzODBkZmU1NDVhNA==',
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "docs": [{
+            "_id": this.uid,
+          }, ]
+        }
+      })
+      .then((response) => {
+        console.log(response);
+        this.email = response.data.docs[0]._source.email;
+        this.barcode = response.data.docs[0]._source.barcode;
+        this.bakery_coin = response.data.docs[0]._source.bakerycoin;
+        this.contact = response.data.docs[0]._source.contact;
+        this.addr = response.data.docs[0]._source.address;
+        this.pwd = response.data.docs[0]._source.password;
+      }).catch((e) => {
+        console.log(e.response)
+      })
+  },
+  methods: {
+    goto_home() {
+      this.$router.replace('/home');
+    },
+        goto_membership(){
+      this.$router.replace('/membership');
+    },
+    change_pwd() {
+      if (this.pwd == this.origin_pwd) {
+        if (this.new_pwd == this.new_pwd_trial) {
+          // axios POST
+          axios({
+              method: 'POST',
+              url: baseurl + '/bakery_customer/_doc/' + this.uid + '/_update',
+              headers: {
+                Authorization: 'Basic anhaMFFSQzdhOjhlNDhjYzhlLWUxNmUtNDNiNy1hZjUyLTkzODBkZmU1NDVhNA==',
+                'Content-Type': 'application/json'
+              },
+              data: {
+                'doc': {
+                  'password': this.new_pwd,
+                }
+              }
+            })
+            .then((response) => {
+              //var hits_length = response.data.hits.hits.length
+              console.log(response);
+              alert("변경되었습니다");
+              window.history.go(0);
+            }).catch((e) => {
+              console.log(e.response)
+            })
+          this.showDialog = false;
+        } else {
+          alert("비밀번호가 일치하지 않습니다!");
+        }
+      } else {
+        alert("현재 비밀번호가 잘못 입력되었습니다!");
+      }
+    },
+    click_pay(pay_amount){
+      this.showDialog_2 = true;
+      // 결제할 금액
+      this.user_pay = pay_amount;
+    },
+    pay(){
+    },
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>
+
 <!--template>
   <div class="container-start">
 
@@ -131,191 +347,3 @@ export default {
   }
 </style-->
 
-<template>
-<div class="container-start">
-
-      <div class="row">
-        <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase" style="font-size: 60px">Membership</h2>
-          <h3 class="section-subheading text-muted" style="font-size: 30px">Your info</h3>
-        </div>
-      </div>
-
-      <br>
-      <br>
-      
-  <div class="container">
-    <div class="text-field">
-
-        Name: <span class="user_info" style="font-size:25px">{{ this.uName }}</span>
-        <div class="crack" />
-        Bakery Coin: <span class="user_info" style="font-size:25px">{{ this.bakery_coin }}</span>
-        <div class="crack" />
-        Barcode: <span class="user_info" style="font-size:25px">{{ this.barcode }}</span>
-        <div class="crack" />
-    </div>
-
-
-
-          <span>
-            <md-dialog :md-active.sync="showDialog" @md-opened="openDialogFunction" @md-closed="closeDialogFunction"> <!--trigger function 추가 -->
-              <md-dialog-title>베이커리 코인 충전하기</md-dialog-title>
-
-              <md-tabs md-dynamic-height>
-                <md-tab md-label="베이커리 코인 충전하기">
-                  <div style="font-weight:bold;">가격: {{this.tot_price}}</div>
-                  <span>금액</span>
-                  <input type="user_money" v-model="user_money" class="form-control">
-                  <md-button class="md-accent md-dense md-raised" @click="got_money()">충전</md-button>
-                  <p v-if="remain" style="color:red; font-weight:bold; font-size:20px;">잔돈: {{this.remain}}</p>
-                </md-tab>
-
-                
-
-              </md-tabs>
-
-              <md-dialog-actions>
-                <md-button class="md-primary" @click="close_pay()">닫기</md-button>
-                <md-button id="payButton" class="md-dense md-raised md-primary" @click="pay()" disabled>충전하기</md-button>
-              </md-dialog-actions>
-            </md-dialog>
-
-            <md-button class="md-primary md-raised" @click="showDialog = true">베이커리 코인 충전하기</md-button>
-          </span>
-
-
-          <md-dialog-confirm :md-active.sync="active" md-title="충전을 취소하시겠습니까?" md-content="" md-confirm-text="확인" md-cancel-text="취소" @md-cancel="onCancel" @md-confirm="close_pay" />
-          <md-button class="md-primary md-raised" @click="active = true">취소</md-button>
-        </div>
-      </div>
-</template>
-
-
-<script>
-import axios from 'axios'
-const baseurl = 'https://scalr.api.appbase.io'
-var payWindow = false;
-function numberFormat(inputNumber) { // 정규식으로 숫자 천 단위로 콤마찍기
-   return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-export default {
-  name: 'Membership',
-  data() {
-    return {
-      is_clicked: false,
-      active: false,
-      showDialog: false,
-      user_barcode: null,
-      user_money: null,
-      user_amount: null,
-      uName: null,
-      user_bakeryCoin: null,
-      user_id: null,
-      user_remain_coin: null,
-    }
-  },
-  created() {
-
-    this.uid = this.$session.get('uId');
-    this.uName = this.$session.get('uName');
-      this.uPassword = this.$session.get('bakery_coin');
-      this.uPassword = this.$session.get('barcode');
-    // axios POST
-    axios({
-        method: 'POST',
-        url: baseurl + '/bakery_consumer/_mget',
-        headers: {
-          Authorization: 'Basic eXVkeG5LSXFGOmM4NWFiNGE0LWQ0ZTktNDJjNC1iMDdkLTMzMTMwYTU1MzRhMw==',
-          'Content-Type': 'application/json'
-        },
-        data: {
-          "docs": [{
-            "_id": this.uid,
-          }, ]
-        }
-      })
-
-  },
-  destroyed() {
-      this.$barcodeScanner.destroy()
-  },
-  methods: {
-    goto_home() {
-      this.$router.replace('/')
-    },
-    openDialogFunction(){
-      payWindow = true;
-      this.tot_price = this.sum
-    },
-    closeDialogFunction(){
-      payWindow = false;
-    },
-    
-   
-    pay() {
-      if (this.ok_pressed) {
-        this.remain = null;
-        this.showDialog = false;
-        if (this.user_money == null){
-          // only user BakeryCoin
-          this.user_money = 0;
-        }
-        if (this.user_barcode == null){
-          // only use CASH
-          this.user_bakeryCoin = 0;
-          this.user_name = '익명';
-        }
-        // set rDetail: rAmount, rName
-       
-          axios({
-              method: 'POST',
-              url: baseurl + '/bakery_customer/_doc/' + this.user_id + '/_update',
-              headers: {
-                Authorization: 'Basic anhaMFFSQzdhOjhlNDhjYzhlLWUxNmUtNDNiNy1hZjUyLTkzODBkZmU1NDVhNA==',
-                'Content-Type': 'application/json'
-              },
-              data: {
-                'doc': {
-                  'bakeryCoin': this.user_remain_coin,
-                }
-              }
-            })
-            .then((response) => {
-              //var hits_length = response.data.hits.hits.length
-              console.log("")
-              console.log(response);
-            }).catch((e) => {
-              console.log(e.response)
-            })
-        }
-
-    },
- 
-    got_money() {
-      // when using CASH
-      this.remain = null;
-      if (this.user_money != null) {
-        if (this.user_money < this.sum) {
-          alert("잔금 " + (this.sum - this.user_money) + "원은 베이커리 코인으로 결제하세요.");
-          this.tot_price = this.sum - this.user_money;
-          this.is_remain = true;
-          this.is_partial_pay = true;
-        } else {
-          // big or same Money --> remain!
-          this.remain = this.user_money - this.tot_price;
-          this.ok_pressed = true;
-          document.getElementById("payButton").disabled = false;
-        }
-      } else {
-        alert("에러: 받은 현금이 없습니다!");
-      }
-    },
-    
-  }
-}
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>

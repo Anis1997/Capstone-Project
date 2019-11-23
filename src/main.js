@@ -9,6 +9,7 @@ import ReactiveSearch from '@appbaseio/reactivesearch-vue'
 import store from './store'
 import './firebase'
 import VueSession from 'vue-session'
+import VueBarcodeScanner from 'vue-barcode-scanner'
 
 import VueMaterial from 'vue-material'
 import { MdButton, MdContent, MdTabs } from 'vue-material/dist/components'
@@ -32,6 +33,7 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(ReactiveSearch)
 Vue.use(VueSession)
+Vue.use(VueBarcodeScanner)
 //Vue.use(VueCarousel)
 
 Vue.prototype.$axios = axios

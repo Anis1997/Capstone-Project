@@ -1,59 +1,69 @@
-<template>
-  <div class="container-start">
 
-      <div class="row">
+<template>
+<div class="container-start">
+<br>
+
+ <div class="row">
         <div class="col-lg-12 text-center">
           <h2 class="section-heading text-uppercase" style="font-size: 60px">My page</h2>
           <h3 class="section-subheading text-muted" style="font-size: 30px">Your info</h3>
         </div>
       </div>
 
-      <br>
-      <br>
+<br>
+<br>
 
-    <div class="container">
-      <div class="text-field" style="font-size:30px">
-        <br>
-        <br>
+      <div class="welcome" style="margin-bottom:10px;">
+        <span style="color:blue;">{{this.uName}}</span>님의 개인정보를 확인하세요
+      </div>
 
-        <div class="welcome" style="font-size:30px">
-          {{this.uName}}님의 개인정보를 확인하세요
-        </div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">이름</th>
+            <th scope="col">연락처</th>
+            <th scope="col">이메일</th>
+            <th scope="col">주소</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-primary">
+            <th scope="row">{{this.uName}}</th>
+            <td>{{this.contact}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.addr}}</td>
+          </tr>
+        </tbody>
+      </table>
 
-        Name: <span class="user_info" style="font-size:25px">{{ this.uName }}</span>
-        <div class="crack" />
-        Email: <span class="user_info" style="font-size:25px">{{ this.uEmail }}</span>
-        <div class="crack" />
-        Password: <span class="user_info" style="font-size:25px">{{ this.uPassword }}</span>
-        <div class="crack" />
-        Bakery Coin: <span class="user_info" style="font-size:25px">{{ this.bakery_coin }}</span>
-        <div class="crack" />
-        Barcode: <span class="user_info" style="font-size:25px">{{ this.barcode }}</span>
-        <div class="crack" />
+      <span style="color:gray;">비밀번호를 변경하시겠습니까?</span>
+      <span>
         <span>
-          <span>
-              <md-dialog :md-active.sync="showDialog">
-                <md-dialog-title>Change password</md-dialog-title>
+          <md-dialog :md-active.sync="showDialog">
+            <md-dialog-title>사용자 정보 변경</md-dialog-title>
 
-                <md-tabs md-dynamic-height>
-                  <md-tab md-label="비밀번호 변경">
-                    <input type="password" v-model="password" class="form-control" placeholder="새 비밀번호">
-                    <input type="password_trial" v-model="password_trial" class="form-control" placeholder="새 비밀번호 재입력">
-                  </md-tab>
-                </md-tabs>
+            <md-tabs md-dynamic-height>
+              <md-tab md-label="비밀번호 변경">
+                <input type="origin_pwd" v-model="origin_pwd" class="form-control" placeholder="기존 비밀번호">
+                <input type="pwd" v-model="new_pwd" class="form-control" placeholder="새 비밀번호">
+                <input type="pwd_trial" v-model="new_pwd_trial" class="form-control" placeholder="새 비밀번호 재입력">
+              </md-tab>
+            </md-tabs>
 
-                <md-dialog-actions>
-                  <md-button class="md-primary" @click="showDialog = false">취소</md-button>
-                  <md-button class="md-primary" @click="change_password()">변경</md-button>
-                </md-dialog-actions>
-              </md-dialog>
+            <md-dialog-actions>
+              <md-button class="md-primary" @click="showDialog = false">취소</md-button>
+              <md-button class="md-primary" @click="change_pwd()">변경</md-button>
+            </md-dialog-actions>
+          </md-dialog>
 
-              <button class="btn btn-danger btn-sm" @click="showDialog = true" style="margin-left:10px;">비밀번호 변경</button>
-            </span><br><br>
+          <button class="btn btn-danger btn-sm" @click="showDialog = true" style="margin-left:10px;">비밀번호 변경</button>
+        </span>
 
+      </span><br>
+      <br>
+      <br>
 
-
-             <span>
+      <span>
               <md-dialog :md-active.sync="showDialog1">
                 <md-dialog-title>You may like these</md-dialog-title>
 
@@ -82,15 +92,40 @@
               <button class="btn btn-danger btn-sm" @click="showDialog1 = true" style="margin-left:10px;">You may want to check this out!</button>
             </span>
 
-  
+    <br>
+    <br>
 
-        </span>
-<br>
+      <h5 id="theme" style="margin:center, font-weight:bold;">나의 베이커리 코인</h5>
+      <div class="sub-container" style="">
 
-<button v-on:click="goto_membership()">My Membership</button>
+        <div class="my_coin">
 
-      </div>
-       <footer class="footer">
+
+
+
+        </div>
+
+ <div class="card border-info mb-3" style="max-width: 20rem;">
+            <div class="card-header">{{this.uName}}님</div>
+            <div class="card-body">
+     
+                <tr>
+                  <td>바코드 번호</td>
+                  <td>{{this.barcode}}</td>
+                </tr>
+                <tr>
+                  <td>현재 금액</td>
+                  <td>{{this.bakery_coin}}</td>
+                </tr>
+
+                  <button v-on:click="goto_membership()">My Membership</button>
+            
+            </div>
+          </div>
+
+  </div>
+
+  <footer class="footer">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-4">
@@ -128,87 +163,113 @@
       </div>
     </div>
   </footer>
-    </div>
-  </div>
+</div>
 </template>
 
 <script>
 import "./styles.css";
-import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default.css';
-
 import axios from 'axios'
 const baseurl = 'https://scalr.api.appbase.io'
-
 export default {
   name: 'Mypage',
- data() {
+  data() {
     return {
-      showDialog: false,
-      showDialog1: false,
-      uName: null,
+      uName: '',
       barcode: '',
       bakery_coin: 0,
       contact: '',
-      uEmail: null,
+      email: '',
       addr: '',
-      uPassword: '',
+      pwd: '',
+      origin_pwd: '',
+      new_pwd_trial: '',
+      new_pwd: '',
       coupon_lists: null,
-      password:null,
-      password_trial:null,
+      uid: '',
+      showDialog: false,
+      showDialog_2: false,
+      showDialog1: false,
+      user_pay: null,
     };
   },
- 
   created() {
-      this.uName = this.$session.get('uName');
-      this.uEmail = this.$session.get('uEmail');
-      this.uPassword = this.$session.get('uPassword');
-      this.uPassword = this.$session.get('bakery_coin');
-      this.uPassword = this.$session.get('barcode');
-    },
-    
-   
+    this.uName = this.$session.get('uName');
+    this.uid = this.$session.get('uId');
+    // get user info.
+    axios({
+        method: 'POST',
+        url: baseurl + '/bakery_customer/_mget',
+        headers: {
+          Authorization: 'Basic anhaMFFSQzdhOjhlNDhjYzhlLWUxNmUtNDNiNy1hZjUyLTkzODBkZmU1NDVhNA==',
+          'Content-Type': 'application/json'
+        },
+        data: {
+          "docs": [{
+            "_id": this.uid,
+          }, ]
+        }
+      })
+      .then((response) => {
+        console.log(response);
+        this.email = response.data.docs[0]._source.email;
+        this.barcode = response.data.docs[0]._source.barcode;
+        this.bakery_coin = response.data.docs[0]._source.bakerycoin;
+        this.contact = response.data.docs[0]._source.contact;
+        this.addr = response.data.docs[0]._source.address;
+        this.pwd = response.data.docs[0]._source.password;
+      }).catch((e) => {
+        console.log(e.response)
+      })
+  },
   methods: {
     goto_home() {
-      this.$router.replace('/')
+      this.$router.replace('/home');
     },
         goto_membership(){
       this.$router.replace('/membership');
     },
-    change_password() {
-      if(this.password == this.password_trial){
-        // axios POST
-        axios({
-            method: 'POST',
-            url: baseurl + '/bakery_consumer' + this.uName + '/_update',
-            headers: {
-              Authorization: 'Basic eXVkeG5LSXFGOmM4NWFiNGE0LWQ0ZTktNDJjNC1iMDdkLTMzMTMwYTU1MzRhMw==',
-              'Content-Type': 'application/json'
-            },
-            data: {
-              'doc': {
-                'password': this.password,
+    change_pwd() {
+      if (this.pwd == this.origin_pwd) {
+        if (this.new_pwd == this.new_pwd_trial) {
+          // axios POST
+          axios({
+              method: 'POST',
+              url: baseurl + '/bakery_customer/_doc/' + this.uid + '/_update',
+              headers: {
+                Authorization: 'Basic anhaMFFSQzdhOjhlNDhjYzhlLWUxNmUtNDNiNy1hZjUyLTkzODBkZmU1NDVhNA==',
+                'Content-Type': 'application/json'
+              },
+              data: {
+                'doc': {
+                  'password': this.new_pwd,
+                }
               }
-            }
-          })
-          .then((response) => {
-            //var hits_length = response.data.hits.hits.length
-            console.log(response);
-            alert("변경되었습니다");
-            window.history.go(0);
-          }).catch((e) => {
-            console.log(e.response)
-          })
-        this.showDialog = false;
-       
-      }else{
-        alert("비밀번호가 일치하지 않습니다!");
+            })
+            .then((response) => {
+              //var hits_length = response.data.hits.hits.length
+              console.log(response);
+              alert("변경되었습니다");
+              window.history.go(0);
+            }).catch((e) => {
+              console.log(e.response)
+            })
+          this.showDialog = false;
+        } else {
+          alert("비밀번호가 일치하지 않습니다!");
+        }
+      } else {
+        alert("현재 비밀번호가 잘못 입력되었습니다!");
       }
     },
-
+    click_pay(pay_amount){
+      this.showDialog_2 = true;
+      // 결제할 금액
+      this.user_pay = pay_amount;
+    },
+    pay(){
+    },
   }
 }
-
 </script>
 
 <style scoped>
@@ -216,15 +277,27 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
 @import 'bootstrap.css';
 
-.crack {
-  margin-bottom: 10px;
+.sub-container {
+  background-color: #EFEADB;
+  display: grid;
+  grid-template-areas:
+    'my_coin coin_pay';
 }
-.user_info{
-  color: blue;
+.my_coin {
+  grid-area: my_coin;
+  display: grid;
+}
+.coin_pay {
+  grid-area: coin_pay;
+  display: grid;
 }
 
-  .md-dialog {
-    width: 768px;
-  }
+.container {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.crack {
+  margin-top:5px;
+  margin-bottom: 5px;
+}
 </style>
 

@@ -34,7 +34,7 @@
     <div class="container">
       <div class="intro-text">
         <div class="intro-lead-in">Welcome To Our Bakery Web!</div>
-        <div class="intro-heading text-uppercase">It's Nice To Meet You</div>
+        <div class="intro-heading text-uppercase">반갑습니다!</div>
         
         <div class="welcome" style="font-size: 40px">
         환영합니다! {{this.uName}}님!
@@ -49,8 +49,6 @@
   </header>
 
 <Services></Services>
-<Franchises></Franchises>
-
 <Contact></Contact>
 
 
