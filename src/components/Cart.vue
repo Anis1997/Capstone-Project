@@ -20,28 +20,13 @@
 
       <br>
       <br>
+
 <span>
               <md-dialog :md-active.sync="showDialog">
                 <md-dialog-title>Recommendation for you!</md-dialog-title>
 
                 <md-tabs md-dynamic-height>
-        <md-tab md-label="New Stuff">
-           <reactive-base app="" credentials="">
-            <reactive-list componentId="SearchResult" dataField="_id" :showResultStats="false" :pagination="true" :from="0" :size="10" :defaultQuery="this.defaultQuery">
-              <div slot="renderData" slot-scope="{ item }">
-                <div class="flex book-content" key="item._id">
-                  <div class="flex column justify-center ml20">
-                    <div style="font-weight:bold; margin-bottom:10px" >{{ item.pName }}</div>
-                    <div>
-                      <span class="small-title" >[가격] {{ item.pPrice }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </reactive-list>
-          </reactive-base>
-        </md-tab>
-
+    
         <md-tab md-label="Most Popular">
           <reactive-base app="bakery_record" credentials="TqzgC7pxS:222d2517-2375-4324-bf75-13085ec4aa7d">
             <reactive-list componentId="SearchResult" dataField="_id" :showResultStats="false" :pagination="true" :from="0" :size="10" :defaultQuery="this.defaultQuery">
@@ -103,7 +88,7 @@
               <div slot="renderData" slot-scope="{ item }">
                 <div class="flex book-content" key="item._id">
                   <div class="flex column justify-center ml20">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Soboro-ppang.jpg" alt="Simply Easy Learning" width="200" height="80">
+                    <img :src="item.pImg" alt="Image" class="book-image" />
                     <div style="font-weight:bold; margin-bottom:10px;">{{ item.pName }}</div>
                     <table style="margin-bottom:5px; width:300px;">
                       <tr>
@@ -194,6 +179,9 @@
     </div>
   </footer>
 </div>
+  </div>
+</div>
+
 </template>
 
 
@@ -212,13 +200,13 @@ export default {
       user_amount: null,
       cart_name: [],
       cart_amount: [],
+      cart_price: [],
       now_tot_amount: 0,
       click_type: 0,
-      showDialog: false,
-      
+      tot_price: 0,
+      showDialog:false,
     };
   },
-
   created() {
     this.manager_id = this.$session.get('managerId');
     axios({
@@ -267,7 +255,7 @@ export default {
     get_click_type(){
       return(this.click_type);
     },
-    add_cart(id, name) {
+    add_cart(id, name, price) {
       if (this.user_amount <= 0) {
         alert("양수를 입력해주세요!");
       } else {
@@ -276,6 +264,7 @@ export default {
           // newly add
           this.cart_name.push(name);
           this.cart_amount.push(this.user_amount);
+          this.cart_price.push(price);
           alert("추가되었습니다");
         } else {
           // change amount
@@ -285,20 +274,26 @@ export default {
         this.user_amount = null;
         var html = '';
         html += '<table><tr><td style="font-weight:bold; color:blue;">제품명</td><td style="font-weight:bold; color:blue;">수량</td></tr>';
+        var temp_price = 0;
         for (var i = 0; i < this.cart_name.length; i++) {
           html += '<tr><td>';
           html += this.cart_name[i];
           html += '</td><td>';
           html += this.cart_amount[i];
           html += '</td></tr>';
+          // get tot_price
+          temp_price += (this.cart_price[i]*this.cart_amount[i]);
         }
         html += '</table>';
         document.getElementById("cart_lists").innerHTML = html;
+        this.tot_price = temp_price;
       }
     },
     cart_reset() {
       this.cart_name = [];
       this.cart_amount = [];
+      this.cart_price = [];
+      this.tot_price = 0;
       document.getElementById("cart_lists").innerHTML = '';
     },
     delete_cart(name) {
@@ -309,8 +304,10 @@ export default {
       } else {
         this.cart_name.splice(i, 1);
         this.cart_amount.splice(i, 1);
+        this.cart_price.splice(i, 1);
         // update cart
         var html = '';
+        var temp_price = 0;
         if (this.cart_name.length == 0) {
           html = '비어있습니다';
         } else {
@@ -321,10 +318,13 @@ export default {
             html += '</td><td>';
             html += this.cart_amount[i];
             html += '</td></tr>';
+            // get tot_price
+            temp_price += (this.cart_price[i]*this.cart_amount[i]);
           }
           html += '</table>';
         }
         document.getElementById("cart_lists").innerHTML = html;
+        this.tot_price = temp_price;
       }
     },
     goto_pay() {
@@ -336,6 +336,8 @@ export default {
           arr += this.cart_name[i];
           arr += '", "pAmount" : "';
           arr += this.cart_amount[i];
+          arr += '", "pPrice" : "';
+          arr += this.cart_price[i];
           if (i != (this.cart_name.length - 1)) {
             arr += '" },';
           } else {
@@ -344,6 +346,7 @@ export default {
         }
         var arr_final = JSON.parse(arr);
         this.$session.set('cart_array', arr_final);
+        this.$session.set('cart_price', this.tot_price);
         this.$router.replace('/pay');
       } else {
         alert("장바구니가 비어있습니다!");

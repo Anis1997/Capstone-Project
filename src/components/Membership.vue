@@ -204,6 +204,44 @@ export default {
       this.user_pay = pay_amount;
     },
     pay(){
+       var pg = 'html5_inicis'
+      var pay_method = 'card'
+      var merchant_uid = 'recharge_'+this.uid+'_'+new Date().getTime()
+      var name = '베이커리 코인 : '+this.user_pay +"원"
+      var amount = '100' //테스트 결제 시 백원으로 고정
+      var buyer_name = this.uName
+      var buyer_tel = this.contact
+      var buyer_addr = this.addr
+      var buyer_email = this.email
+      var after_coin = this.before_coin*1 + this.user_pay*1;
+      var id = this.uid
+      $(function(){
+          IMP.request_pay({
+          pg : pg,
+          pay_method : pay_method,
+          merchant_uid : merchant_uid,
+          name : name,
+          amount : amount,
+          buyer_email : buyer_email,
+          buyer_name : buyer_name,
+          buyer_tel : buyer_tel,
+          buyer_addr : buyer_addr,
+      }, function(rsp) {
+          if ( rsp.success ) {
+              msg = '결제가 완료되었습니다.\n';
+              //msg += '고유ID : ' + rsp.imp_uid+"\n";
+              //msg += '상점 거래ID : ' + rsp.merchant_uid+"\n";
+              msg += '결제 금액 : ' + rsp.paid_amount+"\n";
+              //msg += '카드 승인번호 : ' + rsp.apply_num+"\n";
+              msg += '이용 해 주셔서 감사합니다.'
+          } else {
+              msg = '결제에 실패하였습니다.\n';
+              msg += '에러내용 : ' + rsp.error_msg;
+          }
+          updateCoin(rsp.success, id, after_coin)
+          });
+      });
+      this.showDialog_2 = false;
     },
   }
 }
